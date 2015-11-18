@@ -37,7 +37,8 @@ loop_center(N,Msg,List) ->
 send_all(_,[]) ->
 	true;
 send_all(Token,[P|Rest]) ->
-	send_all(P!Token,Rest).
+  P!Token,
+	send_all(Token,Rest).
 wait_all([]) ->
 	true;
 wait_all([P|Rest]) ->
