@@ -1,3 +1,0 @@
--record(carta,{valor=as,palo=corazones}).
-
--record(mano,{cartas=[]}).
