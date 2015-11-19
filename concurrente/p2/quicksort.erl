@@ -2,7 +2,8 @@
 -export([sort/1]).
 
 
-
+% este quicksort crea un proceso para procesar el lado derecho 
+% y utiliza el mismo para el izquierdo
 sort([]) -> [];
 sort([P|List]) ->
     L = [X || X <- List, X < P],

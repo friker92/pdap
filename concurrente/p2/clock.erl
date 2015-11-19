@@ -1,6 +1,8 @@
 -module(clock).
 -export([start/1, stop/0]) .
 
+
+% simplemente preguntando si clock esta definido, se previene el problema
 start(Time) ->
     L = whereis(clock),
     if L == undefined ->
