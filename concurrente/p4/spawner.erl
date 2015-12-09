@@ -1,11 +1,12 @@
 -module(spawner).
 -export([start/0,stop/0,spawn_register/2,loop/0]).
 
-
+%% Lanza el servidor de spawn_register, no hay comprobaciones de seguridad...
 start() ->
     register(sregis,spawn(fun() ->
 				  loop()
 			  end)).
+%% para el servidor, aunque normalmente no lo haremos
 stop() ->
     W = whereis(sregis),
     if  W =/= undefined ->
@@ -20,6 +21,8 @@ stop() ->
 	    ok
     end.
 
+
+% bucle del servidor esperando solicitudes
 loop() ->
     receive 
 	{From,register,Name,Fun} ->
@@ -36,6 +39,8 @@ loop() ->
 	    From ! {ok}
     end.
 
+
+% funcion interfaz para hacer un spawn y registro atómico.
 spawn_register(Name,Fun) ->
     W = whereis(sregis),
     if W == undefined ->

@@ -1,0 +1,23 @@
+He implementado el juego con algunas variaciones, para empezar el servidor
+dispone de una API para crear un servidor registrado en "serv" y otra para
+registralo donde le mandes. Ademas el registro se realiza a traves de un 
+servidor "spawn_register" que lo registramos bajo "sregis". 
+
+Por ello para utilizar el código, aparte de compilar, los pasos son:
+spwaner:start().
+server:start().
+
+Y en el player tienes diferentes formas de conectarte, por lo general te llamas
+"federico" pero puedes elegir otro nombre al inicializar.
+
+Como extras tenemos:
+- Se te identifica por el nombre.
+- Hay puntuación, se dan puntos en funcion del tamaño de la palabra
+- Si el juego esta empezado, un nuevo jugador puede participar desde el principio
+- Se pueden añadir y quitar palabras al vuelo en el servidor
+- Se comprueba que los jugadores estan vivos.
+- Al salir del servidor con un stop, se manda finalizar a los jugadores.
+- Los jugadores pueden ejecutar comandos (#stop, #stats, #points) a la vez que enviar palabras solucion.
+- Solo se te permite añadir si tu nombre no esta repetido.
+- Puedes consultar puntuacion.
+- Y seguro que me dejo alguna cosilla por decir, pero el código está comentado.
