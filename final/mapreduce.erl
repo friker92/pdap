@@ -6,6 +6,12 @@
 % funciones de nodo
 %-export([node_map/3]).
 
+%%% Para ejecutar
+%% > c(mapreduce).
+%% > M = mapreduce:ejemplo1().
+%% > mapreduce:cliente1(M).
+
+
 
 start(Info,N) ->
     Mpid = spawn(fun() ->
@@ -28,7 +34,8 @@ loop_master(Info, N, Nodes) ->
 	stop ->
 	    stop;
 	{From,{mapreduce, Parent, FMap, FReduce}} ->
-	    From ! {self(),{admin,mradmin(Nodes,Parent,FMap,FReduce)}};
+	    From ! {self(),{admin,mradmin(Nodes,Parent,FMap,FReduce)}},
+	    loop_master(Info, N, Nodes);
 	X ->
 	    io:format("~p~n",[X]),
 	    loop_master(Info, N, Nodes)

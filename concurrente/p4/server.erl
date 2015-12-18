@@ -243,11 +243,11 @@ get_name([{Pid,Name,_}|P],From) ->
 check_player_exists([],_) ->
     % si vaciamos la lista significa que no existe
     false;
-check_player_exists([{_,Pname,0}|Players],Name) ->
+check_player_exists([{_,Pname,_}|Players],Name) ->
     if Name == all ->
 	    % no permitimos que nadie se llame all
 	    true;
-	Pname =/= Name ->
+	Pname /= Name ->
 	    check_player_exists(Players,Name);
        true ->
 	    % si esta utilizado mandamos un true
