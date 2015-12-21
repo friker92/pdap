@@ -14,6 +14,7 @@ init({Id,Master,Info}) ->
 
 handle_cast({startmap,From, FMap},{Id,Master,Info}) ->
     spawn(fun()->
+		  io:format("-------~n~p~n--------~n",[{Id,Master,Info}]),
 		  lists:map(fun(Part) ->
 				    List = FMap(Id,Part),
 				    lists:map(fun({C,V}) ->

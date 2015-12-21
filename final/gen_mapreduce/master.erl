@@ -3,7 +3,7 @@
 -export([init/1,terminate/2,handle_call/3,handle_cast/2,handle_info/2,code_change/3]).
 -behaviour(gen_server).
 % funciones de master
--export([ejemplo1/0,client1/1,fmap1/2,freduce1/3,start/2]).
+-export([ejemplo1/0,client1/1,fmap1/2,freduce1/3,start/2,newmap/2]).
 -define(SERVERNAME, ?MODULE).
 
 % init breve para lanzar el ejemplo
@@ -24,6 +24,11 @@ freduce1(Clave,ValorActual,ValorNuevo) ->
     io:format("DEBUG: Clave: ~p, VA: ~p, VN: ~p~n",[Clave,ValorActual,ValorNuevo]),
     max(ValorActual,ValorNuevo).
 
+newmap(M,1) ->
+    add_mapper(M,[{madrid,54},{madrid,14},{barcelona,18}]);
+newmap(M,2) ->
+    add_mapper(M,[{verona,54},{verona,114},{verona,18}]).
+
 start(Info,N) ->
     node_master(Info,N).
 
@@ -35,6 +40,10 @@ node_admin(Nodes,Parent,FMap,FReduce) ->
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %%% gen_server MASTER
 
+add_mapper(M,Info) ->
+    gen_server:cast(M,{newnode,Info}).
+    
+
 node_master(Info,N) -> 
     gen_server:start_link({local,master},?MODULE, {Info,N}, []).
 
@@ -42,13 +51,18 @@ init({Info,N}) ->
     Self = self(),
     Parts = split_N(Info,N),
     Nodes = lists:map(fun(Id) ->
+			      io:format("~p~n",[lists:nth(Id,Parts)]),
 			      node_map(Id,Self,lists:nth(Id,Parts))
 		      end,lists:seq(1,length(Parts))),
-    {ok, {Info,N,Nodes}}.
+    {ok, {length(Parts),Nodes}}.
 
-handle_call({mapreduce,_Parent,FMap, FReduce},From,{Info,N,Nodes}) ->
+handle_call({mapreduce,_Parent,FMap, FReduce},From,{N,Nodes}) ->
     node_admin(Nodes,From,FMap,FReduce),
-    {noreply,{Info,N,Nodes}}.
+    {noreply,{N,Nodes}}.
+handle_cast({newnode,Part},{N,Nodes}) ->
+    io:format("+~p~n",[Part]),
+    Pid = node_map(N,self(),Part),
+    {noreply,{N+1,[Pid|Nodes]}};
 handle_cast({stop},State) ->
     {stop,normal,State};
 
