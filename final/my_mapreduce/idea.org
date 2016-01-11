@@ -1,0 +1,53 @@
+Mi versión MapReduce tiene la siguiente idea de fondo.
+
+* Nodo MASTER
+- Existe un servidor (master) al que se le pueden pedir N nodos para
+  realizar una tarea mapreduce. Al hacer la petición nos devuelve un
+  administrador que puede gestionar los nodos. Tiene un sistema muy
+  básico de optimización... si hay dos tareas MR a la primera le
+  asigna los N primeros y a la segunda continua asignando como si
+  fuese un array ciclico de modo que todas las tareas tendran el
+  numero de nodos solicitado (siempre q sea menor al existentes) y un
+  nodo puede estar en varias tareas.
+* Nodo Admin
+- Cuando se solicita una tarea se crea un "nodo" admin (admin) que
+  recibirá la configuración de la tarea en diferentes mensajes.
+- Una Tarea MR tiene diferentes fases
+** Mensajes
+   Los mensajes se reciben uno a uno hasta recibir un launch.
+*** Información a analizar
+- {addInfo,Info} es un trozo de la información a analizar.
+- {resetInfo} elimina toda información enviada.
+*** Tarea
+- {addFase,{Init,Fase,Fin}}
+- {resetFase}
+*** Basics
+Tenemos Split,Shuffle y Show
+*** Iniciar proceso
+- {init}
+** Fases
+   Las fases son configurables, aunque tienen una definicion por
+   defecto. Las Fases las muestro en orden de ejecución, pero el nodo
+   no sabrá que fase esta ejecutando, simplemente es una máquina que
+   hace lo que se le pide. Las fases Split, Shuffle y Send las
+   realiza el admin de la tarea MR. Map y Reduce las
+   realizan los nodos, estas tareas son ternas {init,fase,fin} de
+   modo que se ejecuta primero una vez init, despues una vez por cada
+   pedazo de información la fase y por ultimo una sola vez la
+   fin. init y fin pueden ser un atomo "none" para indicar que no se
+   realiza nada.
+*** Split
+*** Map_init
+*** Map
+*** Map_fin
+*** Shuffle
+*** Reduce_init
+*** Reduce
+*** Reduce_fin
+*** Send
+* Nodo Worker
+** Mensajes
+*** {ejecuta,Info,{Init,Fase,Fin}}
+**** Info es la informacion a analizar
+**** {Init, Fase, Fin} será una tarea map o reduce
+
