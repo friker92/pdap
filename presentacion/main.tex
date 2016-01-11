@@ -1,0 +1,229 @@
+\documentclass[10pt]{beamer}
+
+\usetheme{m}
+
+\usepackage{times}
+\usepackage{tikz}
+\usepackage{amsmath}
+\usepackage{fancyvrb}
+\usepackage{xspace}
+
+\usepackage{booktabs}
+\usepackage[scale=2]{ccicons}
+
+%\usepackage{pgfplots}
+%\usepgfplotslibrary{dateplot}
+
+\usepackage[latin1]{inputenc}
+\usepackage[spanish]{babel}
+
+\usepackage{listings}
+\usepackage{pgfplots}
+
+
+\title{Javascript Funcional}
+\subtitle{}
+\date{}
+\author{Jesús Javier Doménech Arellano}
+\institute{27 Enero 2016}
+
+\titlegraphic{\hfill\includegraphics[scale=0.29]{images/logo.png}}
+
+\definecolor{bgg}{HTML}{FBFBFB}
+\def\gcolor{bgg}    % while presenting
+%\def\gcolor{black} % while developing
+
+\def\tikzpicdim{
+  \draw[step=0.1cm, color=\gcolor] (0,-1) grid (12,7);
+  \draw[step=1cm, color=\gcolor] (0,-1) grid (12,7);
+}
+
+\let\tikzpicdimlarge\tikzpicdim
+
+\def\myurl{\hfil\penalty 100 \hfilneg \hbox}
+
+\metroset{titleformat=regular}
+\metroset{inner/sectiontitleformat=regular}
+\metroset{outer/frametitleformat=regular}
+\metroset{block=fill}
+\lstset{basicstyle=\footnotesize\ttfamily,breaklines=true, postbreak={\mbox{$\hookrightarrow\space$}}, language=Mathematica}
+
+\usepackage[framemethod=TikZ]{mdframed}
+\mdfdefinestyle{lstlisting}{%
+ innertopmargin=5pt,
+ middlelinewidth=1pt,
+ outerlinewidth=9pt,outerlinecolor=white,
+ innerleftmargin=10pt,
+ innerrightmargin=10pt,
+ leftmargin=-9pt,rightmargin=-9pt,
+ skipabove=\topskip,
+ skipbelow=\topskip,
+ roundcorner=5pt,
+ singleextra={\node[draw, fill=white,anchor=west, xshift=10pt+1pt,font=\bfseries] at (O|-P) {Code Listings};},
+ firstextra={\node[draw, fill=white,anchor=west, xshift=10pt+1pt,font=\bfseries] at (O|-P) {Code Listings};}
+}
+
+\newcommand\sectionDark[1]{{\metroset{background=dark} \section{#1} }}
+
+%== Estilos propios de lstlisting
+\lstset{%
+  %backgroundcolor=\color{yellow!20},%
+    basicstyle=\tiny\ttfamily,breaklines=true,
+    numbers=left, numberstyle=\tiny, stepnumber=1, numbersep=5pt,%
+    frame=single%
+    }%
+
+% Add your keywords here, and have this in a separate file
+% and include it in your preamble
+%\lstset{emph={%  
+%    procedure, end, to, do, pragma, omp, parallel, for, private%
+%    },emphstyle={\color{black}\bfseries\underline}%
+%}%
+
+
+
+\begin{document}
+
+\maketitle
+
+
+
+%%======= INDICE ========================================
+%\begin{frame}
+%  \frametitle{Índice}
+%  \setbeamertemplate{section in toc}[sections numbered]
+%  \tableofcontents[hideallsubsections]
+%\end{frame}
+
+%\section{Introduction} %=== Esrto genera una página de sección.
+
+
+
+\begin{frame}[fragile,fragile]
+  \frametitle{Javascript}
+  \begin{tikzpicture}
+    \tikzpicdimlarge
+    \only<1->{\node[] (def) at (0.5,6) {
+        \begin{minipage}{0.9\textwidth}
+          Este lenguaje posee las siguientes características:
+          \begin{itemize}
+          \item Es dinamicamente tipado.
+          \item Esta orientado a objetos (prototype).
+          \item Funcional.
+          \item De propósito general.
+          \end{itemize}
+        \end{minipage}
+      };}
+    
+    \only<2->{\node[] (def) at (0.5,2) {
+        \begin{minipage}{0.9\textwidth}
+          Además, está presente en:
+          \begin{itemize}
+          \item Aplicaciones móviles.
+          \item Sitios web.
+          \item Servidores web.
+          \item Aplicaciones de escritorio.
+          \item Bases de datos.
+          \end{itemize}
+        \end{minipage}
+      };}
+  \end{tikzpicture}
+\end{frame}
+
+
+\begin{frame}[fragile,fragile,fragile]
+  \frametitle{}
+    \begin{tikzpicture}
+    \tikzpicdimlarge
+    \begin{onlyenv}<1->
+    \node at (0.5,6) {
+      \begin{minipage}{0.9\textwidth}
+\begin{lstlisting}
+    (param1, param2, ...) => expresión;
+\end{lstlisting}
+
+       
+        \end{minipage}
+      };
+    \end{onlyenv}
+    
+    \only<2->{\node at (0.5,2) {
+        \begin{minipage}{0.9\textwidth}
+          Además, está presente en:
+          \begin{itemize}
+          \item Aplicaciones móviles.
+          \item Sitios web.
+          \item Servidores web.
+          \item Aplicaciones de escritorio.
+          \item Bases de datos.
+          \end{itemize}
+        \end{minipage}
+      };}
+  \end{tikzpicture}
+\end{frame}
+
+\begin{frame}
+  \frametitle{Pruebas realizadas}
+
+  \alert{Pruebas realizadas:}
+  \begin{itemize}
+  \item Ejecución de Cholesky \textbf{secuencial} (gcc \& icc).
+  \item Ejecución de Cholesky usando \textbf{16 pthreads} (gcc \& icc).
+  \item Ejecución de Cholesky utilizando \textbf{OpenMP - gcc}.
+  \item Ejecución de Cholesky utilizando \textbf{OpenMP - Intel}.
+  \end{itemize}
+
+  \alert{Características de las pruebas:}
+  \begin{itemize}
+  \item Matriz 4096x4096 elementos.
+  \item 16 hilos de ejecución.
+  \end{itemize}
+  \alert{Características de la máquina:}
+  \begin{itemize}
+  \item Intel Xeon E5530 - 2.4 GHz
+  \item 48 GB RAM
+  \item Debian Jessie, Kernel 3.14-1-amd64
+  \item gcc v4.8.3
+  \item icc v14.0.3
+  \end{itemize}
+
+\end{frame}
+
+\begin{frame}
+  \frametitle{Resultados}
+  
+  \begin{figure}
+    \centering
+    \begin{tikzpicture}
+      \begin{axis}[
+        mbarplot,
+        xlabel={Tipo de ejecución},
+        ylabel={Tiempo (s)},
+        symbolic x coords={secuencial,pthread,OpenMP},
+        xtick=data,
+        nodes near coords,
+        nodes near coords align={vertical},
+        ]
+        \addplot coordinates {(secuencial,43.17) (pthread,27.70) (OpenMP,12.76)};
+        \addplot coordinates {(secuencial,20.97) (pthread,10.81) (OpenMP,5.58)};
+        \legend{gcc, icc}
+      \end{axis}
+    \end{tikzpicture}
+  \end{figure}
+
+
+\end{frame}
+
+%======= BIBLIOGRAFÍA =======
+\begin{frame}
+  \frametitle{Bibliografía}
+  
+  \begin{enumerate}
+  \item \url{https://pm.bsc.es/}
+  \item \url{https://software.intel.com/en-us/c-compilers}
+  \item \url{https://gcc.gnu.org/}
+  \item \url{https://es.wikipedia.org/wiki/Factorizaci\%C3\%B3n_de_Cholesky}
+  \end{enumerate}
+\end{frame}
+
+\end{document}
