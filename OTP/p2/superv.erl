@@ -4,7 +4,7 @@
 
 -export([init/1, start/0]).
 
-start() -> supervisor:start_link({local,?MODULE},?MODULE, []).
+start() -> supervisor:start_link(?MODULE, []).
 
 init(_) -> 
   {ok, 

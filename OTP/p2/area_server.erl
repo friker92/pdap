@@ -16,8 +16,12 @@ handle_call(Other, _From, State) ->
   {reply, {error, Other}, State}.
 
 init(_) ->  
+io:format("AREA Servidor inicializado!~n"),
   process_flag(trap_exit, true), {ok, ok}.
 
+
+handle_cast(stop, State) ->
+  {stop, normal, State};
 handle_cast(Request, State) ->
   io:format("Unexpected request: ~w~n", [Request]),
   {noreply, State}.

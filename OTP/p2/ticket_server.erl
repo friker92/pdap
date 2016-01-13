@@ -11,7 +11,7 @@ start(N) -> gen_server:start_link({local, ?SERVERNAME}, ?MODULE, N, []).
 get_ticket() -> gen_server:call(?SERVERNAME, get_ticket).
 
 init(N) when N > 0 -> 
-  io:format("Servidor inicializado!~n"),
+  io:format("Ticket Servidor inicializado!~n"),
   {ok, lists:seq(1,N)};
 init(N) -> {stop, {bad_parameter, N}}.
 
@@ -19,10 +19,12 @@ handle_call(get_ticket, _From, []) -> {stop, no_tickets, error, []};
 handle_call(get_ticket, _From, [T]) -> {stop, normal, T, []};
 handle_call(get_ticket, _From, [T|Ts]) -> {reply, T, Ts}.
 
+handle_cast(stop, State) ->
+  {stop, normal, State};
 handle_cast(Request, State) ->
   io:format("Unexpected request: ~w~n", [Request]),
   {noreply, State}.
-
+  
 handle_info(Message, State) ->
   io:format("Unexpected message: ~w~n", [Message]),
   {noreply, State}.

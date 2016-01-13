@@ -7,6 +7,7 @@
 start(N) -> supervisor:start_link(?MODULE, [N]).
 
 init([1]) ->
+process_flag(trap_exit, true),
     {ok, 
      {{one_for_one, 2, 1}, 
       [
@@ -17,8 +18,9 @@ init([1]) ->
     };
 
 init([N]) ->
+process_flag(trap_exit, true),
   {ok, 
-    {{one_for_one, 2, 1}, 
+    {{one_for_one, 2*N, 1}, 
      [
       {nodeIzq, {supervTree, start, [N-1]}, permanent, 5000, supervisor, [supervTree]},
       {nodeDer, {supervTree, start, [N-1]}, permanent, 5000, supervisor, [supervTree]}

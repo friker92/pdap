@@ -9,6 +9,7 @@ start(Dir) -> gen_server:start_link({local,?MODULE},?MODULE, Dir, []).
 
 
 init(Dir) -> 
+io:format("AFILE Servidor inicializado!~n"),
   process_flag(trap_exit, true),
 %  spawn_link(?MODULE, muerete_ya, []),
   {ok, Dir}.
@@ -21,7 +22,9 @@ handle_call({get_file, File}, _From, Dir) ->
   {reply, file:read_file(Full), Dir}.
 
 handle_cast({change_dir, NewDir}, _Dir) ->
-  {noreply, NewDir}.
+  {noreply, NewDir};
+handle_cast(stop, Dir) ->
+  {stop, normal, Dir}.
 
 handle_info(Message, State) ->
   io:format("Unexpected message: ~w~n", [Message]),
@@ -29,7 +32,7 @@ handle_info(Message, State) ->
   
 terminate(Reason, _State) ->
   io:format("File server finished.~n"),
-  io:format("Reason: ~w~n", [Reason]).
+  io:format("Reason: ~p'~n", [Reason]).
 
 code_change(PreviousVersion, State, _Extra) ->
   io:format("Code change from ~w~n", [PreviousVersion]),
