@@ -34,8 +34,8 @@
 %\def\gcolor{black} % while developing
 
 \def\tikzpicdim{
-  \draw[step=0.1cm, color=\gcolor] (0,-1) grid (12,7);
-  \draw[step=1cm, color=\gcolor] (0,-1) grid (12,7);
+  \draw[step=0.1cm, color=\gcolor] (0,0) grid (12,7);
+  \draw[step=1cm, color=\gcolor] (0,0) grid (12,7);
 }
 
 \let\tikzpicdimlarge\tikzpicdim
@@ -46,29 +46,14 @@
 \metroset{inner/sectiontitleformat=regular}
 \metroset{outer/frametitleformat=regular}
 \metroset{block=fill}
-\lstset{basicstyle=\footnotesize\ttfamily,breaklines=true, postbreak={\mbox{$\hookrightarrow\space$}}, language=Mathematica}
 
-\usepackage[framemethod=TikZ]{mdframed}
-\mdfdefinestyle{lstlisting}{%
- innertopmargin=5pt,
- middlelinewidth=1pt,
- outerlinewidth=9pt,outerlinecolor=white,
- innerleftmargin=10pt,
- innerrightmargin=10pt,
- leftmargin=-9pt,rightmargin=-9pt,
- skipabove=\topskip,
- skipbelow=\topskip,
- roundcorner=5pt,
- singleextra={\node[draw, fill=white,anchor=west, xshift=10pt+1pt,font=\bfseries] at (O|-P) {Code Listings};},
- firstextra={\node[draw, fill=white,anchor=west, xshift=10pt+1pt,font=\bfseries] at (O|-P) {Code Listings};}
-}
 
 \newcommand\sectionDark[1]{{\metroset{background=dark} \section{#1} }}
 
 %== Estilos propios de lstlisting
 \lstset{%
   %backgroundcolor=\color{yellow!20},%
-    basicstyle=\tiny\ttfamily,breaklines=true,
+    basicstyle=\scriptsize\ttfamily,% breaklines=true,
     numbers=left, numberstyle=\tiny, stepnumber=1, numbersep=5pt,%
     frame=single%
     }%
@@ -132,97 +117,161 @@
 
 
 \begin{frame}[fragile,fragile,fragile]
-  \frametitle{}
+  \frametitle{Expresiones}
     \begin{tikzpicture}
     \tikzpicdimlarge
     \begin{onlyenv}<1->
     \node at (0.5,6) {
       \begin{minipage}{0.9\textwidth}
+        \alert{$\lambda$ expresiones:}
 \begin{lstlisting}
-    (param1, param2, ...) => expresión;
-\end{lstlisting}
+(param1, param2, ...) => expresión;
 
-       
+(param1, param2, ...) => {
+                           predicado1;
+                           predicado2;
+                           ...
+                           return predicadofinal;
+                         }
+\end{lstlisting}
         \end{minipage}
       };
     \end{onlyenv}
-    
-    \only<2->{\node at (0.5,2) {
-        \begin{minipage}{0.9\textwidth}
-          Además, está presente en:
-          \begin{itemize}
-          \item Aplicaciones móviles.
-          \item Sitios web.
-          \item Servidores web.
-          \item Aplicaciones de escritorio.
-          \item Bases de datos.
-          \end{itemize}
+
+    \begin{onlyenv}<2->
+    \node at (0.5,2.4) {
+      \begin{minipage}{0.9\textwidth}
+        \alert{Funciones:}
+\begin{lstlisting}
+   function (param1, param2, ...){
+      instrucción1;
+      instrucción2;
+      ...
+      return instrucciónfinal;
+   }
+
+   function Nombre( ... ){ ... }
+\end{lstlisting}
         \end{minipage}
-      };}
+      };
+    \end{onlyenv}    
+
+  \end{tikzpicture}
+\end{frame}
+
+\begin{frame}[fragile]
+  \frametitle{Ejemplo}
+
+\begin{lstlisting}
+    var multiplicar = (a,b) => a * b;
+
+    var apply = (opt, a, b) => opt(a,b);
+    apply(multiplicar, 4, 8); // -> 32
+\end{lstlisting}
+\begin{lstlisting}
+    function sumar(a) {
+       return function (b) {
+          return a + b;
+       }
+    }
+   
+    sumar(3)(4); //-> 7
+\end{lstlisting}
+
+\end{frame}
+
+\begin{frame}[fragile,fragile,fragile]
+  \frametitle{Condicionales}
+    \begin{tikzpicture}
+    \tikzpicdimlarge
+    \begin{onlyenv}<1->
+    \node at (0.5,6) {
+      \begin{minipage}{0.9\textwidth}
+        \alert{Erlang:}
+\begin{lstlisting}
+condición1 -> 
+              instrucciones1;
+condición2 -> 
+              instrucciones2;
+...
+condiciónN ->
+              instruccionesN;
+true       ->
+              instruccionesDefault;
+\end{lstlisting}
+        \end{minipage}
+      };
+    \end{onlyenv}
+
+    \begin{onlyenv}<2->
+    \node at (0.5,3.4) {
+      \begin{minipage}{0.9\textwidth}
+        \alert{Operador Ternario js:}
+\begin{lstlisting}
+ condición ? instruccionesCasoCierto : instruccionesCasoFalso;
+\end{lstlisting}
+        \end{minipage}
+      };
+    \end{onlyenv}    
+
+    \begin{onlyenv}<3->
+    \node at (0.5,1.9) {
+      \begin{minipage}{0.9\textwidth}
+\begin{lstlisting}
+ condición1 ? instrucciones1 : 
+ condición2 ? instrucciones2 : 
+ ...
+ condiciónN ? instruccionesN : 
+              instruccionesDefault;
+\end{lstlisting}
+        \end{minipage}
+      };
+    \end{onlyenv}    
+
   \end{tikzpicture}
 \end{frame}
 
 \begin{frame}
-  \frametitle{Pruebas realizadas}
+  \frametitle{UnderScore}
+UnderScore y Lodash son dos librerías que definen un entorno contenido
+en la variable ``\_''. Nos proporciona métodos para realizar bucles.
 
-  \alert{Pruebas realizadas:}
-  \begin{itemize}
-  \item Ejecución de Cholesky \textbf{secuencial} (gcc \& icc).
-  \item Ejecución de Cholesky usando \textbf{16 pthreads} (gcc \& icc).
-  \item Ejecución de Cholesky utilizando \textbf{OpenMP - gcc}.
-  \item Ejecución de Cholesky utilizando \textbf{OpenMP - Intel}.
-  \end{itemize}
-
-  \alert{Características de las pruebas:}
-  \begin{itemize}
-  \item Matriz 4096x4096 elementos.
-  \item 16 hilos de ejecución.
-  \end{itemize}
-  \alert{Características de la máquina:}
-  \begin{itemize}
-  \item Intel Xeon E5530 - 2.4 GHz
-  \item 48 GB RAM
-  \item Debian Jessie, Kernel 3.14-1-amd64
-  \item gcc v4.8.3
-  \item icc v14.0.3
-  \end{itemize}
+\begin{itemize}
+\item \emph{forEach}: recibe una lista y una función, se ejecuta la
+  función una vez por cada elemento de la lista.
+\item \emph{map}: recibe una lista y una función, devuelve el
+  resultado de ejecutar la función a cada elemento de la lista.
+\item \emph{filter}: recibe una lista y una función, devuelve los
+  valores de la lista que dan cierto en la función pasada.
+\item \emph{reduce}: recibe una lista, una función y un elemento
+  base. La función recibe un acumulador y un elemento de la
+  lista. Devuelve el valor final de la acumulación.
+\item \emph{curry}: recibe una función con N argumentos y la
+  currifica.
+\end{itemize}
 
 \end{frame}
+
+
 
 \begin{frame}
-  \frametitle{Resultados}
-  
-  \begin{figure}
-    \centering
-    \begin{tikzpicture}
-      \begin{axis}[
-        mbarplot,
-        xlabel={Tipo de ejecución},
-        ylabel={Tiempo (s)},
-        symbolic x coords={secuencial,pthread,OpenMP},
-        xtick=data,
-        nodes near coords,
-        nodes near coords align={vertical},
-        ]
-        \addplot coordinates {(secuencial,43.17) (pthread,27.70) (OpenMP,12.76)};
-        \addplot coordinates {(secuencial,20.97) (pthread,10.81) (OpenMP,5.58)};
-        \legend{gcc, icc}
-      \end{axis}
-    \end{tikzpicture}
-  \end{figure}
-
-
+  \frametitle{¿Más? }
+\begin{itemize}
+\item \emph{Wrappers}
+\item \emph{Funtores}
+\item \emph{IO Monads}
+\item \emph{Acceso al DOM}
+\end{itemize}
 \end{frame}
+
+\sectionDark{Ejemplo}
 
 %======= BIBLIOGRAFÍA =======
 \begin{frame}
   \frametitle{Bibliografía}
   
   \begin{enumerate}
-  \item \url{https://pm.bsc.es/}
-  \item \url{https://software.intel.com/en-us/c-compilers}
-  \item \url{https://gcc.gnu.org/}
-  \item \url{https://es.wikipedia.org/wiki/Factorizaci\%C3\%B3n_de_Cholesky}
+  \item \url{https://dzone.com/storage/assets/379008-rc217-functionalprogramming.pdf}
   \end{enumerate}
 \end{frame}
 
