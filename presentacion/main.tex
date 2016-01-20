@@ -11,14 +11,18 @@
 \usepackage{booktabs}
 \usepackage[scale=2]{ccicons}
 
-%\usepackage{pgfplots}
-%\usepgfplotslibrary{dateplot}
+% \usepgfplotslibrary{dateplot}
 
 \usepackage[latin1]{inputenc}
 \usepackage[spanish]{babel}
 
+\usepackage{suffix}
 \usepackage{listings}
 \usepackage{pgfplots}
+\usepackage{color}
+\definecolor{lightgray}{rgb}{.9,.9,.9}
+\definecolor{darkgray}{rgb}{.4,.4,.4}
+\definecolor{purple}{rgb}{0.65, 0.12, 0.82}
 
 
 \title{Javascript Funcional}
@@ -31,7 +35,7 @@
 
 \definecolor{bgg}{HTML}{FBFBFB}
 \def\gcolor{bgg}    % while presenting
-%\def\gcolor{black} % while developing
+% \def\gcolor{black} % while developing
 
 \def\tikzpicdim{
   \draw[step=0.1cm, color=\gcolor] (0,0) grid (12,7);
@@ -47,45 +51,58 @@
 \metroset{outer/frametitleformat=regular}
 \metroset{block=fill}
 
-
 \newcommand\sectionDark[1]{{\metroset{background=dark} \section{#1} }}
+\WithSuffix\newcommand\sectionDark*[1]{{\metroset{background=dark} \section*{#1}}}
 
-%== Estilos propios de lstlisting
-\lstset{%
-  %backgroundcolor=\color{yellow!20},%
-    basicstyle=\scriptsize\ttfamily,% breaklines=true,
-    numbers=left, numberstyle=\tiny, stepnumber=1, numbersep=5pt,%
-    frame=single%
-    }%
+% == Estilos propios de lstlisting
+
+\lstdefinelanguage{JavaScript}{
+  keywords={typeof, new, true, false, catch, function, return, null,
+    catch, switch, var, if, in, while, do, for, default, else, case, break},
+  keywordstyle=\color{blue},%\bfseries,
+  ndkeywords={class, export, boolean, throw, implements, import, this},
+  ndkeywordstyle=\color{darkgray}\bfseries,
+  identifierstyle=\color{black},
+  sensitive=false,
+  comment=[l]{//},
+  morecomment=[s]{/*}{*/},
+  commentstyle=\color{purple}\ttfamily,
+  stringstyle=\color{red}\ttfamily,
+  morestring=[b]',
+  morestring=[b]"
+}
+
+\lstset{
+   language=JavaScript,
+  % backgroundcolor=\color{yellow!20},%
+  basicstyle=\scriptsize\ttfamily,% breaklines=true,
+  numbers=left, numberstyle=\tiny, stepnumber=1, numbersep=5pt,%
+  frame=single, showstringspaces=false,
+   showspaces=false%
+}%
 
 % Add your keywords here, and have this in a separate file
 % and include it in your preamble
-%\lstset{emph={%  
-%    procedure, end, to, do, pragma, omp, parallel, for, private%
-%    },emphstyle={\color{black}\bfseries\underline}%
-%}%
-
-
+% \lstset{emph={%  
+% procedure, end, to, do, pragma, omp, parallel, for, private%
+% },emphstyle={\color{black}\bfseries\underline}%
+% }%
 
 \begin{document}
 
 \maketitle
 
+%% ======= INDICE ========================================
+\begin{frame}
+  \frametitle{Índice}
+  \setbeamertemplate{section in toc}[sections numbered]
+  \tableofcontents[hideallsubsections]
+\end{frame}
 
-
-%%======= INDICE ========================================
-%\begin{frame}
-%  \frametitle{Índice}
-%  \setbeamertemplate{section in toc}[sections numbered]
-%  \tableofcontents[hideallsubsections]
-%\end{frame}
-
-%\section{Introduction} %=== Esrto genera una página de sección.
-
-
+\sectionDark{¿Por qué Javascript?}
 
 \begin{frame}[fragile,fragile]
-  \frametitle{Javascript}
+  \frametitle{¿Por qué Javascript (JS)?}
   \begin{tikzpicture}
     \tikzpicdimlarge
     \only<1->{\node[] (def) at (0.5,6) {
@@ -115,15 +132,155 @@
   \end{tikzpicture}
 \end{frame}
 
+\sectionDark{JavaScript en 3 minutos}
+
+\begin{frame}[fragile,fragile]
+  \frametitle{JS en 3 min}
+  \alert{Expresiones:}
+\begin{lstlisting}
+// Números siempre son doubles
+3; // -> 3
+1.5; // -> 1.5 
+((10+4*0.5-2)/2)%3; // -> 1?
+
+// Números no reales
+Infinity;
+-Infinity;
+NaN; 
+
+// Booleanos
+true;
+false;
+
+// Strings
+'hola mundo!';
+"hola mundo!";
+
+//Sin valor;
+null; // no tiene valor aposta
+undefined; // no tiene un valor en este ámbito todavía
+\end{lstlisting}
+\end{frame}
+
+\begin{frame}[fragile,fragile]
+  \frametitle{JS en 3 min}
+
+  \alert{Operadores:}
+\begin{lstlisting}
+// + - * / %
+
+!true; // negacion
+1 == 1; // < > <= >=
+
+"Hola " + 'mundo!'; //contatenar
+//tambien puedes comparar strings 
+"a" < 'b'; // -> true
+
+//ATENCION
+"5" == 5; // -> true NO IMPORTA EL TIPO!
+"5" === 5; // -> false 
+\end{lstlisting}
+  \alert{Operador Ternario:}
+\begin{lstlisting}
+ condicion ? instruccionCierto : instruccionFalso;
+\end{lstlisting}
+\end{frame}
+
+\begin{frame}[fragile,fragile]
+  \frametitle{JS en 3 min}
+  \alert{Variables:}
+\begin{lstlisting}
+var nombreDeVariable = 2;
+
+variableSinPoneVar = 22; // ahora es una variable global
+
+var variableSinValor; // -> ahora vale undefined
+\end{lstlisting}
+  \alert{Colecciones:}
+\begin{lstlisting}
+var miArray = [ "hola", 22, true, null, 2.2];
+
+miArray[2]; // -> true
+
+miArray.push("otro");
+miArray.length; //-> 6
+
+// diccionarios == Objetos
+var miObjeto = {clave:"valor", "clave 2": [1,"valor"]};
+
+miObjeto.clave; // -> "valor"
+miObjeto["clave"]; // -> "valor"
+miObjeto.clave3 = 4; 
+miObjeto.clave4; // -> undefined
+\end{lstlisting}
+\end{frame}
 
 \begin{frame}[fragile,fragile,fragile]
-  \frametitle{Expresiones}
-    \begin{tikzpicture}
-    \tikzpicdimlarge
-    \begin{onlyenv}<1->
-    \node at (0.5,6) {
-      \begin{minipage}{0.9\textwidth}
-        \alert{$\lambda$ expresiones:}
+  \frametitle{JS en 3 min}
+  \alert{Estructuras de Control:}
+\begin{lstlisting}
+if ( condicion ) {
+} else if ( condicion2 ) {
+} else {
+}
+
+while ( condicion ) {
+}
+
+do {
+}while ( condicion )
+
+for ( init; condicion; iteracion) {
+}
+
+for ( var key in variable ){  // variable puede ser un Objeto o Array
+}
+
+switch ( variable ) {
+  case Valor1:
+    break;
+  default:
+   break;
+}
+\end{lstlisting}
+\end{frame}
+\begin{frame}[fragile,fragile,fragile]
+  \frametitle{JS en 3 min}
+  \alert{Funciones:}
+\begin{lstlisting}
+   function (param1, param2, ...){
+      instrucción1;
+      instrucción2;
+      ...
+      return instrucciónfinal;
+   }
+
+   function Nombre( ... ){ ... }
+
+   var Nombre2 = function ( ... ) { ... };
+
+\end{lstlisting}
+  \alert{¿Punto y coma?:} No es necesario ponerlo siempre. Pero,
+  \alert{¡cuidado!}
+\begin{lstlisting}
+   function foo (parametro){
+      return   // -> se añade un ; automaticamente 
+      {
+         clave: parametro
+      }
+   }
+
+   foo(10) // -> undefined
+
+\end{lstlisting}
+
+\end{frame}
+
+\sectionDark{JavaScript Funcional}
+
+\begin{frame}[fragile,fragile,fragile]
+  \frametitle{JS Funcional}
+  \alert{$\lambda$ expresiones:}
 \begin{lstlisting}
 (param1, param2, ...) => expresión;
 
@@ -134,60 +291,24 @@
                            return predicadofinal;
                          }
 \end{lstlisting}
-        \end{minipage}
-      };
-    \end{onlyenv}
-
-    \begin{onlyenv}<2->
-    \node at (0.5,2.4) {
-      \begin{minipage}{0.9\textwidth}
-        \alert{Funciones:}
-\begin{lstlisting}
-   function (param1, param2, ...){
-      instrucción1;
-      instrucción2;
-      ...
-      return instrucciónfinal;
-   }
-
-   function Nombre( ... ){ ... }
-\end{lstlisting}
-        \end{minipage}
-      };
-    \end{onlyenv}    
-
-  \end{tikzpicture}
-\end{frame}
-
-\begin{frame}[fragile]
-  \frametitle{Ejemplo}
-
+  \alert{Ejemplo:}
 \begin{lstlisting}
     var multiplicar = (a,b) => a * b;
 
     var apply = (opt, a, b) => opt(a,b);
     apply(multiplicar, 4, 8); // -> 32
 \end{lstlisting}
-\begin{lstlisting}
-    function sumar(a) {
-       return function (b) {
-          return a + b;
-       }
-    }
-   
-    sumar(3)(4); //-> 7
-\end{lstlisting}
 
 \end{frame}
 
 \begin{frame}[fragile,fragile,fragile]
-  \frametitle{Condicionales}
-    \begin{tikzpicture}
+  \frametitle{JS Funcional}
+  \begin{tikzpicture}
     \tikzpicdimlarge
     \begin{onlyenv}<1->
-    \node at (0.5,6) {
-      \begin{minipage}{0.9\textwidth}
-        \alert{Erlang:}
+      \node at (0.5,6) {
+        \begin{minipage}{0.9\textwidth}
+          \alert{Erlang:}
 \begin{lstlisting}
 condición1 -> 
               instrucciones1;
@@ -204,19 +325,9 @@ true       ->
     \end{onlyenv}
 
     \begin{onlyenv}<2->
-    \node at (0.5,3.4) {
-      \begin{minipage}{0.9\textwidth}
-        \alert{Operador Ternario js:}
-\begin{lstlisting}
- condición ? instruccionesCasoCierto : instruccionesCasoFalso;
-\end{lstlisting}
-        \end{minipage}
-      };
-    \end{onlyenv}    
-
-    \begin{onlyenv}<3->
-    \node at (0.5,1.9) {
-      \begin{minipage}{0.9\textwidth}
+      \node at (0.5,2.4) {
+        \begin{minipage}{0.9\textwidth}
+          \alert{Javascript:}
 \begin{lstlisting}
  condición1 ? instrucciones1 : 
  condición2 ? instrucciones2 : 
@@ -232,47 +343,212 @@ true       ->
 \end{frame}
 
 \begin{frame}
-  \frametitle{UnderScore}
-UnderScore y Lodash son dos librerías que definen un entorno contenido
-en la variable ``\_''. Nos proporciona métodos para realizar bucles.
+  \frametitle{JS Funcional}
+  UnderScore y Lodash son dos librerías que definen un entorno contenido
+  en la variable ``\_''. Nos proporciona diferentes métodos:
 
-\begin{itemize}
-\item \emph{forEach}: recibe una lista y una función, se ejecuta la
-  función una vez por cada elemento de la lista.
-\item \emph{map}: recibe una lista y una función, devuelve el
-  resultado de ejecutar la función a cada elemento de la lista.
-\item \emph{filter}: recibe una lista y una función, devuelve los
-  valores de la lista que dan cierto en la función pasada.
-\item \emph{reduce}: recibe una lista, una función y un elemento
-  base. La función recibe un acumulador y un elemento de la
-  lista. Devuelve el valor final de la acumulación.
-\item \emph{curry}: recibe una función con N argumentos y la
-  currifica.
-\end{itemize}
+  \begin{itemize}
+  \item \emph{forEach}: recibe una lista y una función, se ejecuta la
+    función una vez por cada elemento de la lista.
+  \item \emph{map}: recibe una lista y una función, devuelve el
+    resultado de ejecutar la función a cada elemento de la lista.
+  \item \emph{filter}: recibe una lista y una función, devuelve los
+    valores de la lista que dan cierto en la función pasada.
+  \item \emph{reduce}: recibe una lista, una función y un elemento
+    base. La función recibe un acumulador y un elemento de la
+    lista. Devuelve el valor final de la acumulación.
+  \item \emph{curry}: recibe una función con N argumentos y la
+    currifica.
+  \end{itemize}
 
 \end{frame}
-
-
 
 \begin{frame}
-  \frametitle{¿Más? }
-\begin{itemize}
-\item \emph{Wrappers}
-\item \emph{Funtores}
-\item \emph{IO Monads}
-\item \emph{Acceso al DOM}
-\end{itemize}
+  \frametitle{JS Funcional}
+  \alert{¿Más?}
+  \begin{itemize}
+  \item \emph{Wrappers}
+  \item \emph{Funtores}
+  \item \emph{IO Monads}
+  \item \emph{Acceso al DOM}
+  \end{itemize}
 \end{frame}
 
-\sectionDark{Ejemplo}
 
-%======= BIBLIOGRAFÍA =======
+
+\sectionDark{Ejemplos}
+
+\begin{frame}[fragile,fragile,fragile]
+  \frametitle{forEach}
+  \begin{tikzpicture}
+    \tikzpicdimlarge
+    \begin{onlyenv}<1->
+      \node at (0.5,6) {
+        \begin{minipage}{0.9\textwidth}
+\begin{lstlisting}
+function forEach(array, action) {
+  for (var i = 0; i < array.length; i++)
+    action(array[i]);
+}
+\end{lstlisting}
+        \end{minipage}
+      };
+    \end{onlyenv}
+
+    \begin{onlyenv}<2->
+      \node at (0.5,2.4) {
+        \begin{minipage}{0.9\textwidth}
+          \alert{Ejemplo:}
+\begin{lstlisting}
+function sum(numbers) {
+  var total = 0;
+  forEach(numbers, function (number) {
+    total += number;
+  });
+  return total;
+}
+
+console.log(sum([1, 10, 100])); // -> 111
+\end{lstlisting}
+        \end{minipage}
+      };
+    \end{onlyenv}    
+
+  \end{tikzpicture}
+\end{frame}
+
+\begin{frame}[fragile,fragile,fragile]
+  \frametitle{reduce}
+  \begin{tikzpicture}
+    \tikzpicdimlarge
+    \begin{onlyenv}<1->
+      \node at (0.5,6) {
+        \begin{minipage}{0.9\textwidth}
+\begin{lstlisting}
+function reduce(action, base, array) {
+  forEach(array, function (element) {
+    base = action(base, element);
+  });
+  return base;
+}
+\end{lstlisting}
+        \end{minipage}
+      };
+    \end{onlyenv}
+
+    \begin{onlyenv}<2->
+      \node at (0.5,2.4) {
+        \begin{minipage}{0.9\textwidth}
+          \alert{Ejemplo:}
+\begin{lstlisting}
+function add(a, b) {
+  return a + b;
+}
+
+function sum2(numbers) {
+  return reduce(add, 0, numbers);
+}
+
+console.log(sum2([1, 10, 100])); // -> 111
+\end{lstlisting}
+        \end{minipage}
+      };
+    \end{onlyenv}    
+
+  \end{tikzpicture}
+\end{frame}
+
+\begin{frame}[fragile,fragile,fragile]
+  \frametitle{map}
+  \begin{tikzpicture}
+    \tikzpicdimlarge
+    \begin{onlyenv}<1->
+      \node at (0.5,6) {
+        \begin{minipage}{0.9\textwidth}
+\begin{lstlisting}
+function map(action, array) {
+  var result = [];
+  forEach(array, function (element) {
+    result.push(action(element));
+  });
+  return result;
+}
+
+\end{lstlisting}
+        \end{minipage}
+      };
+    \end{onlyenv}
+
+    \begin{onlyenv}<2->
+      \node at (0.5,2.4) {
+        \begin{minipage}{0.9\textwidth}
+          \alert{Ejemplo:}
+\begin{lstlisting}
+console.log(map(Math.round,[0.1,9.8,Math.PI])); // -> [0, 10, 3]
+\end{lstlisting}
+        \end{minipage}
+      };
+    \end{onlyenv}    
+
+  \end{tikzpicture}
+\end{frame}
+
+\begin{frame}[fragile,fragile,fragile]
+  \frametitle{filter}
+  \begin{tikzpicture}
+    \tikzpicdimlarge
+    \begin{onlyenv}<1->
+      \node at (0.5,6) {
+        \begin{minipage}{0.9\textwidth}
+\begin{lstlisting}
+function filter(func, array) {
+  var result = [];
+  forEach(array, function (element) {
+    if (func(element))
+      result.push(element);
+  });
+  return result;
+}
+
+\end{lstlisting}
+        \end{minipage}
+      };
+    \end{onlyenv}
+
+    \begin{onlyenv}<2->
+      \node at (0.5,2.4) {
+        \begin{minipage}{0.9\textwidth}
+          \alert{Ejemplo:}
+\begin{lstlisting}
+function lt(n){
+  return function(a){
+    return a < n;
+  }
+}
+
+console.log(filter(lt(5), [3, 9.89, 4.8])); // -> [3, 4.8]
+\end{lstlisting}
+        \end{minipage}
+      };
+    \end{onlyenv}    
+
+  \end{tikzpicture}
+\end{frame}
+
+
+
+
+\sectionDark{Bibliografía}
+% ======= BIBLIOGRAFÍA =======
 \begin{frame}
   \frametitle{Bibliografía}
-  
   \begin{enumerate}
   \item \url{https://dzone.com/storage/assets/379008-rc217-functionalprogramming.pdf}
+  \item \url{http://bonsaiden.github.io/JavaScript-Garden}
+  \item \url{http://eloquentjavascript.net/1st_edition/chapter6.html}
   \end{enumerate}
 \end{frame}
+
+\sectionDark*{ ¿ ? }
 
 \end{document}
