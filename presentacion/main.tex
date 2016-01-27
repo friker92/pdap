@@ -99,6 +99,24 @@
   \tableofcontents[hideallsubsections]
 \end{frame}
 
+\sectionDark{Programación Funcional}
+
+\begin{frame}
+  \frametitle{Programación Funcional}
+  \alert{Características:}
+  \begin{itemize}
+  \item Código inteligente.
+  \item Menor complejidad.
+  \item Mayor modularidad.
+  \end{itemize}
+  \alert{Herramientas:}
+  \begin{itemize}
+  \item Mutación.
+  \item Combinación.
+  \item Uso de funciones.
+  \end{itemize}
+\end{frame}
+
 \sectionDark{¿Por qué Javascript?}
 
 \begin{frame}[fragile,fragile]
@@ -132,10 +150,10 @@
   \end{tikzpicture}
 \end{frame}
 
-\sectionDark{JavaScript en 3 minutos}
+\sectionDark{JavaScript en 4 minutos}
 
 \begin{frame}[fragile,fragile]
-  \frametitle{JS en 3 min}
+  \frametitle{JS en 4 min}
   \alert{Expresiones:}
 \begin{lstlisting}
 // Números siempre son doubles
@@ -163,7 +181,7 @@ undefined; // no tiene un valor en este ámbito todavía
 \end{frame}
 
 \begin{frame}[fragile,fragile]
-  \frametitle{JS en 3 min}
+  \frametitle{JS en 4 min}
 
   \alert{Operadores:}
 \begin{lstlisting}
@@ -187,7 +205,7 @@ undefined; // no tiene un valor en este ámbito todavía
 \end{frame}
 
 \begin{frame}[fragile,fragile]
-  \frametitle{JS en 3 min}
+  \frametitle{JS en 4 min}
   \alert{Variables:}
 \begin{lstlisting}
 var nombreDeVariable = 2;
@@ -216,7 +234,7 @@ miObjeto.clave4; // -> undefined
 \end{frame}
 
 \begin{frame}[fragile,fragile,fragile]
-  \frametitle{JS en 3 min}
+  \frametitle{JS en 4 min}
   \alert{Estructuras de Control:}
 \begin{lstlisting}
 if ( condicion ) {
@@ -245,7 +263,7 @@ switch ( variable ) {
 \end{lstlisting}
 \end{frame}
 \begin{frame}[fragile,fragile,fragile]
-  \frametitle{JS en 3 min}
+  \frametitle{JS en 4 min}
   \alert{Funciones:}
 \begin{lstlisting}
    function (param1, param2, ...){
@@ -318,7 +336,7 @@ condición2 ->
 condiciónN ->
               instruccionesN;
 true       ->
-              instruccionesDefault;
+              instruccionesDefault
 \end{lstlisting}
         \end{minipage}
       };
@@ -344,7 +362,7 @@ true       ->
 
 \begin{frame}
   \frametitle{JS Funcional}
-  UnderScore y Lodash son dos librerías que definen un entorno contenido
+  ``UnderScore'' y ``Lodash'' son dos librerías que definen un entorno contenido
   en la variable ``\_''. Nos proporciona diferentes métodos:
 
   \begin{itemize}
@@ -361,6 +379,36 @@ true       ->
     currifica.
   \end{itemize}
 
+\end{frame}
+
+\begin{frame}[fragile,fragile]
+  \frametitle{JS Funcional}
+  ``Lazy'' es una librería que nos permite realizar \textbf{evaluación
+  perezosa}.
+\begin{lstlisting}
+Lazy([1, 2, 4])       // instanceof Lazy.ArrayLikeSequence
+Lazy({ foo: "bar" })  // instanceof Lazy.ObjectLikeSequence
+Lazy("hello, world!") // instanceof Lazy.StringLikeSequence
+Lazy()                // sequence: []
+Lazy(null)            // sequence: []
+\end{lstlisting}
+Nos proporciona funciones aplicables a secuencias como:
+\begin{itemize}
+\item \textbf{chunk: } agrupa una secuencia en secuencias de tamaño n.
+\item \textbf{compact:} quita de la secuencia \emph{false, 0, ``'',
+    null} y \emph{undefined}.
+\item \textbf{reduce}, \textbf{map}, \textbf{filter},
+  \textbf{reverse}, \textbf{each}, \textbf{take}, ...
+\end{itemize}
+\begin{lstlisting}
+// Primeros 10 cuadrados divisibles por 3
+var oneTo1000 = Lazy.range(1, 1000).toArray(); 
+var sequence = Lazy(oneTo1000)
+  .map(function(x) { return x * x; })
+  .filter(function(x) { return x % 3 === 0; })
+  .take(10)
+  .each(function(x) { console.log(x); });
+\end{lstlisting}
 \end{frame}
 
 \begin{frame}
@@ -535,6 +583,49 @@ console.log(filter(lt(5), [3, 9.89, 4.8])); // -> [3, 4.8]
   \end{tikzpicture}
 \end{frame}
 
+\begin{frame}[fragile]
+  \frametitle{compose}
+  \begin{tikzpicture}
+    \tikzpicdimlarge
+    \begin{onlyenv}<1->
+      \node at (0.5,6) {
+        \begin{minipage}{0.9\textwidth}
+\begin{lstlisting}
+function compose(f, g) {
+  return function(x) {
+    return f(g(x));
+  };
+}
+\end{lstlisting}
+        \end{minipage}
+      };
+    \end{onlyenv}
+
+    \begin{onlyenv}<2->
+      \node at (0.5,2.4) {
+        \begin{minipage}{0.9\textwidth}
+          \alert{Ejemplo:}
+\begin{lstlisting}
+function f1(a){return a + ' 1';}
+function f2(b){return b + ' 2';}
+function f3(c){return c + ' 3';}
+
+var composition = f3.compose(f2).compose(f1); // f3(f2(f1(___)))
+
+console.log( composition('count') ); // -> 'count 1 2 3'
+// f3(f2(f1('count'))) = f3(f2('count' + ' 1')) = 
+//                     = f3('count 1' + ' 2') =
+//                     = 'count 1 2' + ' 3' = 
+//                     = 'count 1 2 3'
+\end{lstlisting}
+        \end{minipage}
+      };
+    \end{onlyenv}    
+
+  \end{tikzpicture}
+
+\end{frame}
+
 
 
 
@@ -543,9 +634,17 @@ console.log(filter(lt(5), [3, 9.89, 4.8])); // -> [3, 4.8]
 \begin{frame}
   \frametitle{Bibliografía}
   \begin{enumerate}
-  \item \url{https://dzone.com/storage/assets/379008-rc217-functionalprogramming.pdf}
-  \item \url{http://bonsaiden.github.io/JavaScript-Garden}
-  \item \url{http://eloquentjavascript.net/1st_edition/chapter6.html}
+  \item D. Mantyla, ``Functional programming in JavaScript''. Packt
+    Publishing, 2015.
+  \item M. Haverbeke,
+    \href{http://eloquentjavascript.net/1st_edition/chapter6.html}{``Eloquent
+      JavaScript'', A Modern Introduction to Programming} 
+  \item ``Librería Lazy.js''\\\url{http://danieltao.com/lazy.js/}
+  \item ``Librería Underscore.js''\\\url{http://underscorejs.org/}
+  \item Luis Atencio, ``Functional Programming in Javascript''
+    \\\url{https://dzone.com/storage/assets/379008-rc217-functionalprogramming.pdf}
+  \item ``Javascript Garden''\\\url{http://bonsaiden.github.io/JavaScript-Garden}
+
   \end{enumerate}
 \end{frame}
 
